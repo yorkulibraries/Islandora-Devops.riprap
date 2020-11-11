@@ -82,7 +82,7 @@
 
 - name: Install Drupal Islandora Riprap module from Github
   git:
-    repo: https://github.com/roblib/islandora_riprap.git
+    repo: https://github.com/mjordan/islandora_riprap.git
     dest: "{{ drupal_core_path }}/modules/contrib/islandora_riprap"
     force: yes
 
@@ -110,7 +110,8 @@
   cron:
     name: "update fixity"
     minute: "0"
-    hour: "5"
+    hour: "1"
+    day: "1"
     job: "php {{ riprap_home }}/riprap/bin/console app:riprap:check_fixity --settings={{ private_file_dir }}/riprap_config/islandora_riprap_config.yml"
 
 - name: restart apache
