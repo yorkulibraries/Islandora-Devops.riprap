@@ -5,8 +5,9 @@
 
 - name: Get Riprap Microservice from Github
   git:
-    repo: https://github.com/mjordan/riprap.git
+    repo: https://github.com/yorkulibraries/riprap.git
     dest: "{{ riprap_home }}/riprap"
+    version: composer-2
     force: yes
   when: riprap.stat.exists == False
 
