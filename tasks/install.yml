@@ -1,9 +1,9 @@
-- name: Check for Existing microservice
+- name: Check for existing microservice
   stat:
     path: "{{ riprap_home }}/riprap/vendor"
   register: riprap
 
-- name: Get Riprap Microservice from Github
+- name: Get Riprap microservice from GitHub
   git:
     repo: https://github.com/yorkulibraries/riprap.git
     dest: "{{ riprap_home }}/riprap"
@@ -11,7 +11,7 @@
     force: yes
   when: riprap.stat.exists == False
 
-- name: Change riprap directory ownership, group and permissions
+- name: Change Riprap directory ownership, group and permissions
   file:
     path: "{{ riprap_home }}/riprap"
     owner:  "{{ webserver_app_user }}"
@@ -19,7 +19,7 @@
     mode: '0755'
     recurse: True
 
-- name: Composer Install Riprap Microservice
+- name: Composer install Riprap microservice
   composer:
     command: install
     working_dir: "{{ riprap_home }}/riprap"
@@ -27,7 +27,7 @@
   when: riprap.stat.exists == False
   become_user:  "{{ webserver_app_user }}"
 
-- name: Open permissions on riprap cache
+- name: Open permissions on Riprap cache
   file:
     path: "{{ riprap_home }}/riprap/var/cache"
     owner:  "{{ webserver_app_user }}"
@@ -35,7 +35,7 @@
     mode: '0777'
     recurse: True
 
-- name: Add Islandora Ansible Routes
+- name: Add Islandora Routes
   blockinfile:
     path: "{{ riprap_home }}/riprap/config/routes.yaml"
     create: no
@@ -70,7 +70,7 @@
     mode: '0777'
   become: yes
 
-- name: Install riprap RDM config file
+- name: Install Riprap config file
   template:
     src: "riprap_config.j2"
     dest: "{{ private_file_dir }}/riprap_config/islandora_riprap_config.yml"
@@ -78,7 +78,7 @@
     group: "{{ webserver_app_user }}"
   become_user: root
 
-- name: Install Drupal Islandora Riprap module from Github
+- name: Install Drupal Islandora Riprap module from GitHub
   git:
     repo: https://github.com/mjordan/islandora_riprap.git
     dest: "{{ drupal_core_path }}/modules/contrib/islandora_riprap"
@@ -89,7 +89,7 @@
     src: monolog.yaml.j2
     dest: "{{ riprap_home }}/riprap/config/packages/dev/monolog.yaml"
 
-- name: Enable Riprap drupal module
+- name: Enable Riprap Drupal module
   command: "{{ drush_path }} --root {{ drupal_core_path }} -y en islandora_riprap"
 
 - name: Enable JSON:API module (not currently enabled by default
@@ -98,7 +98,7 @@
 - name: Set Riprap rest endpoint
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings riprap_rest_endpoint {{ riprap_rest_endpoint }} -y"
 
-- name: Set Riprap gemini endpoint
+- name: Set Riprap Gemini endpoint
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings gemini_rest_endpoint {{ riprap_gemini_rest_endpoint }} -y"
 
 - name: Set default content type

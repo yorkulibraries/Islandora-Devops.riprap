@@ -13,14 +13,14 @@
     - "conf-enabled"
   when: ansible_os_family == "RedHat"
 
-- name: Install riprap httpd config file
+- name: Install Riprap httpd config file
   template:
     src: "riprap.conf.j2"
     dest: "{{ httpd_conf_directory }}/conf-available/riprap.conf"
     owner: "{{ webserver_app_user }}"
     group: "{{ webserver_app_user }}"
 
-- name: Symlink riprap httpd config file into action
+- name: Symlink Riprap httpd config file into action
   file:
     src: "{{ httpd_conf_directory }}/conf-available/riprap.conf"
     dest: "{{ httpd_conf_directory_enabled }}/riprap.conf"

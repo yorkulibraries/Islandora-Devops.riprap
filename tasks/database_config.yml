@@ -20,7 +20,7 @@
           PRIMARY KEY (id)
       )  ENGINE=INNODB;
 
-- name:  Create table in database
+- name: Create table in database
   mysql_db:
     name: "{{ drupal_db_name }}"
     state: import
