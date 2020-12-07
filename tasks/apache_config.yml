@@ -7,7 +7,7 @@
   file:
     path: "{{ httpd_conf_directory }}/{{ item }}/"
     state: directory
-    mode: "urwx,gr,o-rwx"
+    mode: 0754
   with_items:
     - "conf-available"
     - "conf-enabled"
@@ -19,6 +19,7 @@
     dest: "{{ httpd_conf_directory }}/conf-available/riprap.conf"
     owner: "{{ webserver_app_user }}"
     group: "{{ webserver_app_user }}"
+    mode: 0744
 
 - name: Symlink Riprap httpd config file into action
   file:
@@ -26,5 +27,6 @@
     dest: "{{ httpd_conf_directory_enabled }}/riprap.conf"
     owner: "{{ webserver_app_user }}"
     group: "{{ webserver_app_user }}"
+    mode: 0754
     state: link
   notify: restart apache

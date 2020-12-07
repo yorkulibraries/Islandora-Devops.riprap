@@ -9,14 +9,14 @@
     dest: "{{ riprap_home }}/riprap"
     version: composer-2
     force: yes
-  when: riprap.stat.exists == False
+  when: not riprap.stat.exists
 
 - name: Change Riprap directory ownership, group and permissions
   file:
     path: "{{ riprap_home }}/riprap"
     owner:  "{{ webserver_app_user }}"
     group:  "{{ webserver_app_user }}"
-    mode: '0755'
+    mode: 0755
     recurse: True
 
 - name: Composer install Riprap microservice
@@ -24,7 +24,8 @@
     command: install
     working_dir: "{{ riprap_home }}/riprap"
   ignore_errors: yes
-  when: riprap.stat.exists == False
+  when: not riprap.stat.exists
+  become: true
   become_user:  "{{ webserver_app_user }}"
 
 - name: Open permissions on Riprap cache
@@ -32,7 +33,7 @@
     path: "{{ riprap_home }}/riprap/var/cache"
     owner:  "{{ webserver_app_user }}"
     group:  "{{ webserver_app_user }}"
-    mode: '0777'
+    mode: 0744
     recurse: True
 
 - name: Add Islandora Routes
@@ -59,7 +60,7 @@
   lineinfile:
     path: "{{ riprap_home }}/riprap/.env"
     regexp: 'DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db'
-    line: 'DATABASE_URL=mysql://{{ drupal_db_user}}:{{ drupal_db_password }}@127.0.0.1:3306/{{ drupal_db_name }}'
+    line: 'DATABASE_URL=mysql://{{ drupal_db_user }}:{{ drupal_db_password }}@127.0.0.1:3306/{{ drupal_db_name }}'
 
 - name: Create target directory
   file:
@@ -67,7 +68,7 @@
     state: directory
     owner: "{{ webserver_app_user }}"
     group: "{{ webserver_app_user }}"
-    mode: '0777'
+    mode: 0744
   become: yes
 
 - name: Install Riprap config file
@@ -76,6 +77,8 @@
     dest: "{{ private_file_dir }}/riprap_config/islandora_riprap_config.yml"
     owner: "{{ webserver_app_user }}"
     group: "{{ webserver_app_user }}"
+    mode: 0744
+  become: true
   become_user: root
 
 - name: Install Drupal Islandora Riprap module from GitHub
@@ -88,34 +91,35 @@
   template:
     src: monolog.yaml.j2
     dest: "{{ riprap_home }}/riprap/config/packages/dev/monolog.yaml"
+    mode: 0744
 
-- name: Enable Riprap Drupal module
+- name: Enable Riprap Drupal module # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} -y en islandora_riprap"
 
-- name: Enable JSON:API module (not currently enabled by default
+- name: Enable JSON:API module (not currently enabled by default # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} -y en jsonapi"
 
-- name: Set Riprap rest endpoint
+- name: Set Riprap rest endpoint # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings riprap_rest_endpoint {{ riprap_rest_endpoint }} -y"
 
-- name: Set Riprap Gemini endpoint
+- name: Set Riprap Gemini endpoint # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings gemini_rest_endpoint {{ riprap_gemini_rest_endpoint }} -y"
 
-- name: Set default content type
+- name: Set default content type # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings fixity_content_type {{ default_data_type }} -y"
 
-- name: Set login creds
+- name: Set login username # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings user_name {{ drupal_account_name }} -y"
 
-- name: Set login creds
+- name: Set login password # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings user_pass {{ drupal_account_pass }} -y"
 
 - name: Create daily cron job
   cron:
     name: "update fixity"
-    minute: "0"
-    hour: "1"
-    day: "1"
+    minute: "{{ riprap_cron_minute }}"
+    hour: "{{ riprap_cron_hour }}"
+    day: "{{ riprap_cron_day }}"
     job: "php {{ riprap_home }}/riprap/bin/console app:riprap:check_fixity --settings={{ private_file_dir }}/riprap_config/islandora_riprap_config.yml"
 
 - name: restart apache

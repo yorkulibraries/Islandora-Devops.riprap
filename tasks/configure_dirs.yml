@@ -1,4 +1,4 @@
-- name: Create rivate directory
+- name: Create private directory
   file:
     path: "{{ private_file_dir }}"
     state: directory

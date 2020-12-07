@@ -8,3 +8,6 @@ apache_restart_state: restarted
 riprap_content_type: islandora_object
 riprap_rest_endpoint:  'http://localhost:8000/api/fixity'
 riprap_gemini_rest_endpoint: 'http://localhost:8000/gemini'
+riprap_cron_minute: '0'
+riprap_cron_hour: '1'
+riprap_cron_day: '1'
