@@ -18,10 +18,10 @@ failures_log_path: '{{ crayfish_log_directory }}/riprap_failed_events.log'
 plugins.fetchresourcelist: ['PluginFetchResourceListFromDrupalView']
 drupal_baseurl: '{{ crayfish_drupal_base_url }}'
 drupal_user: '{{ drupal_account_name }}'
-drupal_password: '{{ crayfish_fedora_base_url }}'
+drupal_password: '{{ drupal_account_pass }}'
 # This should use the same hostname/IP address as is used for FCREPO in Islandora's configuration.
 # Otherwise, the file URIs may not match up.
-fedora_baseurl: '{{ fcrepo_baseurl }}'
+fedora_baseurl: '{{ crayfish_fedora_base_url }}'
 # Absolute or relative to the Riprap application directory.
 views_pager_data_file_path: '{{ riprap_home }}/riprap/var/fetchresourcelist.from.drupal.pager.txt'
 
