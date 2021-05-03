@@ -85,6 +85,7 @@
   git:
     repo: https://github.com/mjordan/islandora_riprap.git
     dest: "{{ drupal_core_path }}/modules/contrib/islandora_riprap"
+    version: master
     force: yes
 
 - name: Copy monolog config
