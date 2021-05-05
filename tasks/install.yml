@@ -7,7 +7,7 @@
   git:
     repo: https://github.com/mjordan/riprap.git
     dest: "{{ riprap_home }}/riprap"
-    version: master
+    version: main
     force: yes
   when: not riprap.stat.exists
 
@@ -85,7 +85,7 @@
   git:
     repo: https://github.com/mjordan/islandora_riprap.git
     dest: "{{ drupal_core_path }}/modules/contrib/islandora_riprap"
-    version: master
+    version: main
     force: yes
 
 - name: Copy monolog config
