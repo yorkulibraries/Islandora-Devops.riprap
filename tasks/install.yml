@@ -36,26 +36,6 @@
     mode: 0744
     recurse: True
 
-- name: Add Islandora Routes
-  blockinfile:
-    path: "{{ riprap_home }}/riprap/config/routes.yaml"
-    create: no
-    block: |
-      app_riprap_fixity_events_read_is_islandora:
-          path: /
-          controller: App\Controller\FixityController::read
-          methods: [GET, HEAD]
-
-      app_riprap_fixity_events_add_islandora:
-          path: /
-          controller: App\Controller\FixityController::add
-          methods: [POST]
-
-      app_riprap_fixity_events_update_islandora:
-          path: /
-          controller: App\Controller\FixityController::update
-          methods: [PATCH]
-
 - name: Edit .env file
   lineinfile:
     path: "{{ riprap_home }}/riprap/.env"
@@ -94,11 +74,11 @@
     dest: "{{ riprap_home }}/riprap/config/packages/dev/monolog.yaml"
     mode: 0744
 
+- name: Enable JSON:API module (not currently enabled by default) # noqa 301
+  command: "{{ drush_path }} --root {{ drupal_core_path }} -y en jsonapi"
+
 - name: Enable Riprap Drupal module # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} -y en islandora_riprap"
-
-- name: Enable JSON:API module (not currently enabled by default # noqa 301
-  command: "{{ drush_path }} --root {{ drupal_core_path }} -y en jsonapi"
 
 - name: Set Riprap rest endpoint # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings riprap_rest_endpoint {{ riprap_rest_endpoint }} -y"
