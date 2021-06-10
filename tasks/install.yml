@@ -103,9 +103,6 @@
 - name: Set Riprap rest endpoint # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings riprap_rest_endpoint {{ riprap_rest_endpoint }} -y"
 
-- name: Set Riprap Gemini endpoint # noqa 301
-  command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings gemini_rest_endpoint {{ riprap_gemini_rest_endpoint }} -y"
-
 - name: Set default content type # noqa 301
   command: "{{ drush_path }} --root {{ drupal_core_path }} cset islandora_riprap.settings fixity_content_type {{ default_data_type }} -y"
 

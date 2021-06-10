@@ -2,7 +2,6 @@
 
 An Ansible role that installs [Riprap](https://github.com/mjordan/riprap).
 
-* Centos/RHEL 7.x
 * Ubuntu Xenial
 
 ## Role Variables
@@ -18,7 +17,6 @@ default_data_type: islandora_object
 apache_restart_state: restarted
 riprap_content_type: islandora_object
 riprap_rest_endpoint:  'http://localhost:8000/api/fixity'
-riprap_gemini_rest_endpoint: 'http://localhost:8000/gemini'
 ```
 
 ## Example Playbook
